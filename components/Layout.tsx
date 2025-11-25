@@ -3,9 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Archive, PenTool, Sparkles, Command, PanelLeftClose, PanelLeftOpen, LogOut } from 'lucide-react';
+import { Archive, PenTool, Command, PanelLeftClose, PanelLeftOpen, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AiSidebar } from './AiSidebar';
 import { useAuth } from '@/context/AuthContext';
 
 const SidebarItem: React.FC<{ to: string; icon: React.ReactNode; label: string }> = ({ to, icon, label }) => {
@@ -39,7 +38,6 @@ const SidebarItem: React.FC<{ to: string; icon: React.ReactNode; label: string }
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathname = usePathname();
-  const [isAiOpen, setIsAiOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { user, signInWithGoogle, signOut } = useAuth();
 
@@ -64,7 +62,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               <div className="w-8 h-8 rounded bg-gradient-to-tr from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/20">
                 <Command size={18} className="text-white" />
               </div>
-              <h1 className="font-bold text-lg tracking-tight">CareerVault</h1>
+              <h1 className="font-bold text-lg tracking-tight">CoverLetter Vault</h1>
             </div>
             <button
               onClick={(e) => {
@@ -166,27 +164,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         <div className="max-w-7xl mx-auto p-8 relative z-10 h-full">
           {children}
         </div>
-
-        {/* Floating AI Assistant Button - Hide on write page */}
-        {pathname !== '/write' && (
-          <motion.button
-            onClick={() => setIsAiOpen(true)}
-            className="fixed bottom-6 right-6 z-50 p-4 bg-gradient-to-tr from-primary to-purple-600 text-white rounded-full shadow-2xl hover:shadow-primary/50 hover:scale-110 transition-all duration-200 group"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <Sparkles size={24} className="group-hover:rotate-12 transition-transform" />
-          </motion.button>
-        )}
       </motion.main>
-
-      {/* Global AI Sidebar - Hide on write page */}
-      {pathname !== '/write' && (
-        <AiSidebar isOpen={isAiOpen} onClose={() => setIsAiOpen(false)} />
-      )}
     </div>
   );
 };

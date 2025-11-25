@@ -8,7 +8,7 @@ import { Layout } from "@/components/Layout";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "CareerVault AI",
+    title: "CoverLetter Vault",
     description: "AI-powered cover letter management",
 };
 

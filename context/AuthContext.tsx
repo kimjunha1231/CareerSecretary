@@ -48,8 +48,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 },
             });
             if (error) throw error;
+            // Note: Redirect happens immediately, so alert might not be seen or needed here.
+            // But user asked for it. Since it redirects, maybe they mean "after login"?
+            // But "after login" happens in the callback or when session is restored.
+            // Let's just add it for now, but it might be fleeting.
+            // Actually, for OAuth, the user leaves the page.
+            // The user might mean "when I click login".
+            // Or maybe they mean "when I am successfully logged in".
+            // Given the flow, "successfully logged in" happens on the callback page or when the session is detected.
+            // However, `signOut` is an action we control fully.
         } catch (error) {
             console.error('Error signing in with Google:', error);
+            alert('로그인 중 오류가 발생했습니다.');
         }
     };
 
@@ -57,8 +67,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             const { error } = await supabase.auth.signOut();
             if (error) throw error;
+            alert('로그아웃 되었습니다.');
+            window.location.href = '/'; // Force refresh and go to home
         } catch (error) {
             console.error('Error signing out:', error);
+            alert('로그아웃 중 오류가 발생했습니다.');
         }
     };
 
