@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useDocuments } from '../context/DocumentContext';
 import { generateInsight, generateQuestions } from '../services/geminiService';
 import { ChatMessage } from '../types';
-import { Send, Sparkles, Loader2, User, X, MessageSquare, HelpCircle } from 'lucide-react';
+import { Send, Sparkles, Loader2, User, X, MessageSquare, HelpCircle, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 
@@ -18,7 +19,9 @@ interface AiSidebarProps {
 }
 
 export const AiSidebar: React.FC<AiSidebarProps> = ({ isOpen, onClose, context }) => {
+    const router = useRouter();
     const { documents } = useDocuments();
+    const [expandedDocId, setExpandedDocId] = useState<string | null>(null);
     const [query, setQuery] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [messages, setMessages] = useState<ChatMessage[]>([
@@ -51,17 +54,30 @@ export const AiSidebar: React.FC<AiSidebarProps> = ({ isOpen, onClose, context }
         setQuery('');
         setIsTyping(true);
 
-        const responseText = await generateInsight(userMsg.text, documents);
+        try {
+            const { text, relatedDocIds } = await generateInsight(userMsg.text, documents);
 
-        const modelMsg: ChatMessage = {
-            id: (Date.now() + 1).toString(),
-            role: 'model',
-            text: responseText,
-            timestamp: Date.now()
-        };
+            const modelMsg: ChatMessage = {
+                id: (Date.now() + 1).toString(),
+                role: 'model',
+                text: text,
+                relatedDocIds: relatedDocIds,
+                timestamp: Date.now()
+            };
 
-        setMessages(prev => [...prev, modelMsg]);
-        setIsTyping(false);
+            setMessages(prev => [...prev, modelMsg]);
+        } catch (error) {
+            console.error("Error generating insight:", error);
+            const errorMsg: ChatMessage = {
+                id: (Date.now() + 1).toString(),
+                role: 'model',
+                text: "죄송합니다. 오류가 발생했습니다.",
+                timestamp: Date.now()
+            };
+            setMessages(prev => [...prev, errorMsg]);
+        } finally {
+            setIsTyping(false);
+        }
     };
 
     const handleGenerateQuestions = async () => {
@@ -90,10 +106,15 @@ export const AiSidebar: React.FC<AiSidebarProps> = ({ isOpen, onClose, context }
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.nativeEvent.isComposing) return;
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleSend();
         }
+    };
+
+    const getRelatedDocuments = (ids: string[]) => {
+        return documents.filter(doc => ids.includes(doc.id));
     };
 
     return (
@@ -147,7 +168,22 @@ export const AiSidebar: React.FC<AiSidebarProps> = ({ isOpen, onClose, context }
                                                         strong: ({ node, ...props }) => <span className="font-bold text-indigo-300" {...props} />,
                                                         ul: ({ node, ...props }) => <ul className="list-disc pl-4 my-2 space-y-1" {...props} />,
                                                         ol: ({ node, ...props }) => <ol className="list-decimal pl-4 my-2 space-y-1" {...props} />,
-                                                        p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />
+                                                        p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
+                                                        a: ({ node, href, children, ...props }) => {
+                                                            return (
+                                                                <span
+                                                                    className="text-indigo-300 hover:underline cursor-pointer"
+                                                                    onClick={() => {
+                                                                        if (href) {
+                                                                            // onClose(); // Optional: close sidebar on navigation
+                                                                            router.push(href);
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    {children}
+                                                                </span>
+                                                            );
+                                                        }
                                                     }}
                                                 >
                                                     {msg.text}
@@ -156,6 +192,53 @@ export const AiSidebar: React.FC<AiSidebarProps> = ({ isOpen, onClose, context }
                                                 msg.text
                                             )}
                                         </div>
+
+                                        {/* Related Documents Cards */}
+                                        {msg.role === 'model' && msg.relatedDocIds && msg.relatedDocIds.length > 0 && (
+                                            <div className="mt-3 w-full space-y-2">
+                                                <p className="text-xs text-zinc-500 ml-1">관련 문서</p>
+                                                {getRelatedDocuments(msg.relatedDocIds).map(doc => (
+                                                    <div
+                                                        key={doc.id}
+                                                        className="bg-zinc-900/50 border border-zinc-800 rounded-lg overflow-hidden transition-all"
+                                                    >
+                                                        <div
+                                                            onClick={() => setExpandedDocId(expandedDocId === doc.id ? null : doc.id)}
+                                                            className="p-3 flex items-start justify-between cursor-pointer hover:bg-zinc-800/50 group"
+                                                        >
+                                                            <div>
+                                                                <h4 className="text-sm font-medium text-zinc-200 group-hover:text-indigo-300 transition-colors line-clamp-1">{doc.title}</h4>
+                                                                <p className="text-xs text-zinc-500 mt-1">{doc.company} · {doc.role}</p>
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-[10px] text-zinc-600 bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">{doc.createdAt}</span>
+                                                                {expandedDocId === doc.id ? <ChevronUp size={14} className="text-zinc-500" /> : <ChevronDown size={14} className="text-zinc-500" />}
+                                                            </div>
+                                                        </div>
+
+                                                        {expandedDocId === doc.id && (
+                                                            <div className="px-3 pb-3 pt-0 border-t border-zinc-800/50">
+                                                                <div className="mt-2 flex justify-end">
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            router.push(`/document/${doc.id}`);
+                                                                        }}
+                                                                        className="flex items-center gap-1 text-[10px] text-indigo-400 hover:text-indigo-300 hover:underline"
+                                                                    >
+                                                                        <span>전체 보기</span>
+                                                                        <ExternalLink size={10} />
+                                                                    </button>
+                                                                </div>
+                                                                <div className="mt-2 text-xs text-zinc-400 leading-relaxed max-h-60 overflow-y-auto pr-1 custom-scrollbar">
+                                                                    <ReactMarkdown>{doc.content}</ReactMarkdown>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}

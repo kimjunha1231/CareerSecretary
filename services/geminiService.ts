@@ -1,3 +1,5 @@
+'use server';
+
 import { GoogleGenAI } from "@google/genai";
 import { CoverLetter } from '../types';
 
@@ -12,7 +14,7 @@ const getClient = () => {
 export const generateInsight = async (
   query: string,
   documents: CoverLetter[]
-): Promise<string> => {
+): Promise<{ text: string; relatedDocIds: string[] }> => {
   const ai = getClient();
 
   // Construct a context-rich prompt using all available documents (RAG-lite)
@@ -26,35 +28,61 @@ export const generateInsight = async (
     ---
   `).join('\n');
 
-  const systemInstruction = `You are an expert career consultant and data analyst. 
-  You have access to the user's archive of past cover letters (provided below). 
-  Your goal is to help users find and reuse relevant content from their past applications.
-  
-  Rules:
-  1. When asked about a topic (e.g., "팀워크 경험", "리더십", "프로젝트 경험"), search through ALL cover letters and find the most relevant sections.
-  2. Quote the exact text from the cover letters, mentioning which company/role it was from.
-  3. If multiple examples exist, show the best 2-3 examples.
-  4. Highlight why each example is relevant to the user's question.
-  5. Format your response with Markdown (bolding, lists, quotes) for readability.
-  6. If no relevant content is found, suggest what kind of content the user should write.
-  
-  User's Archive:
-  ${contextData}`;
+  const systemInstruction = `
+    You are a helpful career assistant. You have access to the user's past cover letters.
+    
+    Your goal is to help the user write better cover letters by providing insights from their past work.
+    
+    When answering:
+    1. **ALWAYS respond in Korean.**
+    2. Use the provided context to answer the user's question.
+    3. If you reference a specific cover letter from the context, you MUST format it as a link: [Title](/document/ID). For example: [Samsung Software Engineer](/document/123).
+    4. Be concise and encouraging.
+
+    Output Format:
+    You MUST return a JSON object with the following structure:
+    {
+      "text": "Your helpful response here (in Markdown)",
+      "relatedDocIds": ["id1", "id2"] // List of IDs of the documents you referenced or found relevant
+    }
+    
+    Here is the context (past cover letters):
+    ${contextData}
+  `;
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash-exp',
+      model: 'gemini-2.0-flash',
       contents: query,
       config: {
         systemInstruction: systemInstruction,
-        temperature: 0.3, // Lower temperature for more accurate retrieval
+        temperature: 0.3,
+        responseMimeType: 'application/json',
       }
     });
 
-    return response.text || "데이터를 기반으로 응답을 생성할 수 없습니다.";
-  } catch (error) {
+    const responseText = response.text;
+    if (!responseText) {
+      return { text: "데이터를 기반으로 응답을 생성할 수 없습니다.", relatedDocIds: [] };
+    }
+
+    try {
+      const parsed = JSON.parse(responseText);
+      return {
+        text: parsed.text || responseText,
+        relatedDocIds: parsed.relatedDocIds || []
+      };
+    } catch (e) {
+      console.error("Failed to parse JSON response:", e);
+      // Fallback if JSON parsing fails but we have text
+      return { text: responseText, relatedDocIds: [] };
+    }
+  } catch (error: any) {
     console.error("Gemini API Error:", error);
-    return "죄송합니다. AI와 통신하는 중 오류가 발생했습니다. API 키를 확인해 주세요.";
+    return {
+      text: `오류가 발생했습니다: ${error.message || JSON.stringify(error)} `,
+      relatedDocIds: []
+    };
   }
 };
 
@@ -67,8 +95,8 @@ export const generateQuestions = async (
 
   const systemInstruction = `당신은 전문 커리어 코치입니다. 
   사용자가 지원하려는 회사와 직무, 그리고 채용 공고(선택 사항)를 바탕으로 자기소개서 작성에 도움이 될 만한 질문 3~5가지를 제안해야 합니다.
-  
-  규칙:
+
+    규칙:
   1. 질문은 구체적이고 생각할 거리를 던져주는 것이어야 합니다.
   2. 해당 직무에 필요한 핵심 역량을 파악할 수 있는 질문이어야 합니다.
   3. 한국어로 정중하게 답변해 주세요.
@@ -83,7 +111,7 @@ export const generateQuestions = async (
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash', // Use cheaper model for simple task
+      model: 'gemini-2.0-flash', // Use cheaper model for simple task
       contents: prompt,
       config: {
         systemInstruction: systemInstruction,

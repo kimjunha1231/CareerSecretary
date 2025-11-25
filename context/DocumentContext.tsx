@@ -39,6 +39,8 @@ export const DocumentProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         content: doc.content,
         createdAt: new Date(doc.created_at).toISOString().split('T')[0],
         jobPostUrl: doc.job_post_url,
+        status: doc.status || 'pending',
+        tags: doc.tags || [],
       }));
 
       setDocuments(transformedData);

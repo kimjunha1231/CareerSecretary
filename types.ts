@@ -1,13 +1,16 @@
 import React from 'react';
 
-export interface CoverLetter {
+export interface Document {
   id: string;
+  user_id: string;
   title: string;
   company: string;
   role: string;
   content: string;
-  createdAt: string;
-  jobPostUrl?: string;
+  status: 'pending' | 'pass' | 'fail';
+  tags: string[];
+  created_at: string;
+  job_post_url?: string; // Optional, keeping it if needed for backward compat or future use
 }
 
 export interface ChatMessage {
@@ -15,6 +18,7 @@ export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
   timestamp: number;
+  relatedDocIds?: string[];
 }
 
 export interface BentoItemProps {

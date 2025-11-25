@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS documents (
   role TEXT NOT NULL,
   content TEXT NOT NULL,
   job_post_url TEXT,
+  status TEXT DEFAULT 'pending',
+  tags TEXT[] DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );

@@ -5,6 +5,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { useDocuments } from '@/context/DocumentContext';
 import { ArrowLeft, Calendar, Trash2, Building2, Edit2, Save, X, Copy, Check } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { TagInput } from '@/components/ui/tag-input';
+import { Badge } from '@/components/ui/badge';
 
 interface Section {
     title: string;
@@ -24,6 +26,7 @@ export default function DocumentDetail() {
         company: '',
         role: '',
         jobPostUrl: '',
+        tags: [] as string[],
         sections: [] as Section[]
     });
     const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
@@ -45,6 +48,7 @@ export default function DocumentDetail() {
                 company: doc.company,
                 role: doc.role,
                 jobPostUrl: doc.jobPostUrl || '',
+                tags: doc.tags || [],
                 sections: finalSections
             });
         }
@@ -80,7 +84,8 @@ export default function DocumentDetail() {
             company: editForm.company,
             role: editForm.role,
             content: combinedContent,
-            jobPostUrl: editForm.jobPostUrl
+            jobPostUrl: editForm.jobPostUrl,
+            tags: editForm.tags
         });
         setIsEditing(false);
     };
@@ -136,6 +141,12 @@ export default function DocumentDetail() {
                                     className="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white focus:border-primary focus:outline-none text-sm"
                                     placeholder="채용 공고 링크 (선택)"
                                 />
+                                <TagInput
+                                    tags={editForm.tags}
+                                    onChange={tags => setEditForm(prev => ({ ...prev, tags }))}
+                                    placeholder="태그 입력..."
+                                    className="bg-zinc-900 border-zinc-700"
+                                />
                             </div>
                         ) : (
                             <div>
@@ -154,6 +165,11 @@ export default function DocumentDetail() {
                                         <Calendar size={14} />
                                         {doc.createdAt}
                                     </div>
+                                    {doc.tags && doc.tags.map(tag => (
+                                        <Badge key={tag} variant="secondary" className="text-xs">
+                                            {tag}
+                                        </Badge>
+                                    ))}
                                 </div>
                                 {doc.jobPostUrl && (
                                     <div className="flex items-start gap-2 text-sm">

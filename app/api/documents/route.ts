@@ -20,7 +20,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { title, company, role, content, jobPostUrl } = body;
+        const { title, company, role, content, jobPostUrl, status, tags } = body;
 
         const { data, error } = await supabase
             .from('documents')
@@ -31,6 +31,8 @@ export async function POST(request: NextRequest) {
                     role,
                     content,
                     job_post_url: jobPostUrl,
+                    status: status || 'pending',
+                    tags: tags || [],
                 },
             ])
             .select()
@@ -78,19 +80,21 @@ export async function PATCH(request: NextRequest) {
         }
 
         const body = await request.json();
-        const { title, company, role, content, jobPostUrl } = body;
+        const { title, company, role, content, jobPostUrl, status, tags } = body;
 
-        const updateData: any = {};
-        if (title !== undefined) updateData.title = title;
-        if (company !== undefined) updateData.company = company;
-        if (role !== undefined) updateData.role = role;
-        if (content !== undefined) updateData.content = content;
-        if (jobPostUrl !== undefined) updateData.job_post_url = jobPostUrl;
-        updateData.updated_at = new Date().toISOString();
+        const updates: any = {};
+        if (title !== undefined) updates.title = title;
+        if (company !== undefined) updates.company = company;
+        if (role !== undefined) updates.role = role;
+        if (content !== undefined) updates.content = content;
+        if (jobPostUrl !== undefined) updates.job_post_url = jobPostUrl;
+        if (status !== undefined) updates.status = status;
+        if (tags !== undefined) updates.tags = tags;
+        updates.updated_at = new Date().toISOString();
 
         const { data, error } = await supabase
             .from('documents')
-            .update(updateData)
+            .update(updates)
             .eq('id', id)
             .select()
             .single();
@@ -100,6 +104,9 @@ export async function PATCH(request: NextRequest) {
         return NextResponse.json(data);
     } catch (error) {
         console.error('Error updating document:', error);
-        return NextResponse.json({ error: 'Failed to update document' }, { status: 500 });
+        return NextResponse.json({
+            error: 'Failed to update document',
+            details: error instanceof Error ? error.message : String(error)
+        }, { status: 500 });
     }
 }

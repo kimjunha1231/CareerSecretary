@@ -1,5 +1,69 @@
 {
-  "node": {},
+  "node": {
+    "7f191d83bb196e0fa87b81e768a44e72cc146ff3c5": {
+      "workers": {
+        "app/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Fservices%2FgeminiService.ts%22%2C%5B%5B%227f191d83bb196e0fa87b81e768a44e72cc146ff3c5%22%2C%22generateQuestions%22%5D%2C%5B%227fe0658498f0b8ca9afb07aaebf5d0072bcf222470%22%2C%22generateInsight%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/archive/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Fservices%2FgeminiService.ts%22%2C%5B%5B%227f191d83bb196e0fa87b81e768a44e72cc146ff3c5%22%2C%22generateQuestions%22%5D%2C%5B%227fe0658498f0b8ca9afb07aaebf5d0072bcf222470%22%2C%22generateInsight%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/_not-found/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Fservices%2FgeminiService.ts%22%2C%5B%5B%227f191d83bb196e0fa87b81e768a44e72cc146ff3c5%22%2C%22generateQuestions%22%5D%2C%5B%227fe0658498f0b8ca9afb07aaebf5d0072bcf222470%22%2C%22generateInsight%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/write/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Fservices%2FgeminiService.ts%22%2C%5B%5B%227f191d83bb196e0fa87b81e768a44e72cc146ff3c5%22%2C%22generateQuestions%22%5D%2C%5B%227fe0658498f0b8ca9afb07aaebf5d0072bcf222470%22%2C%22generateInsight%22%5D%5D%5D%2C%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Factions%2Fsearch.ts%22%2C%5B%5B%2240278ab1431b4038b0c5bf2c6fd9540e89f118d069%22%2C%22searchDocumentsByTags%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "action-browser",
+        "app/archive/page": "action-browser",
+        "app/_not-found/page": "action-browser",
+        "app/write/page": "action-browser"
+      }
+    },
+    "7fe0658498f0b8ca9afb07aaebf5d0072bcf222470": {
+      "workers": {
+        "app/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Fservices%2FgeminiService.ts%22%2C%5B%5B%227f191d83bb196e0fa87b81e768a44e72cc146ff3c5%22%2C%22generateQuestions%22%5D%2C%5B%227fe0658498f0b8ca9afb07aaebf5d0072bcf222470%22%2C%22generateInsight%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/archive/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Fservices%2FgeminiService.ts%22%2C%5B%5B%227f191d83bb196e0fa87b81e768a44e72cc146ff3c5%22%2C%22generateQuestions%22%5D%2C%5B%227fe0658498f0b8ca9afb07aaebf5d0072bcf222470%22%2C%22generateInsight%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/_not-found/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Fservices%2FgeminiService.ts%22%2C%5B%5B%227f191d83bb196e0fa87b81e768a44e72cc146ff3c5%22%2C%22generateQuestions%22%5D%2C%5B%227fe0658498f0b8ca9afb07aaebf5d0072bcf222470%22%2C%22generateInsight%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        },
+        "app/write/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Fservices%2FgeminiService.ts%22%2C%5B%5B%227f191d83bb196e0fa87b81e768a44e72cc146ff3c5%22%2C%22generateQuestions%22%5D%2C%5B%227fe0658498f0b8ca9afb07aaebf5d0072bcf222470%22%2C%22generateInsight%22%5D%5D%5D%2C%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Factions%2Fsearch.ts%22%2C%5B%5B%2240278ab1431b4038b0c5bf2c6fd9540e89f118d069%22%2C%22searchDocumentsByTags%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/page": "action-browser",
+        "app/archive/page": "action-browser",
+        "app/_not-found/page": "action-browser",
+        "app/write/page": "action-browser"
+      }
+    },
+    "40278ab1431b4038b0c5bf2c6fd9540e89f118d069": {
+      "workers": {
+        "app/write/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Fservices%2FgeminiService.ts%22%2C%5B%5B%227f191d83bb196e0fa87b81e768a44e72cc146ff3c5%22%2C%22generateQuestions%22%5D%2C%5B%227fe0658498f0b8ca9afb07aaebf5d0072bcf222470%22%2C%22generateInsight%22%5D%5D%5D%2C%5B%22%2FUsers%2Fjunha%2Fcoding%2Fcareervault-ai%2Factions%2Fsearch.ts%22%2C%5B%5B%2240278ab1431b4038b0c5bf2c6fd9540e89f118d069%22%2C%22searchDocumentsByTags%22%5D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/write/page": "action-browser"
+      }
+    }
+  },
   "edge": {},
   "encryptionKey": "xO+tv5kNAyi5kDxqrB9U2QI1MIZdxgSisWuIMTl6R78="
 }
