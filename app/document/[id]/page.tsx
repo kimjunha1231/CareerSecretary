@@ -246,6 +246,9 @@ export default function DocumentDetail() {
                                         className="w-full bg-transparent border-none text-xl font-semibold text-white focus:outline-none focus:ring-0 placeholder-zinc-600"
                                         placeholder="문항 제목"
                                     />
+                                    <span className="text-sm text-zinc-500 font-mono shrink-0">
+                                        {section.content.length}자
+                                    </span>
                                 </div>
                                 <div className="ml-4">
                                     <RefineManager
@@ -274,6 +277,9 @@ export default function DocumentDetail() {
                                         {index + 1}
                                     </span>
                                     {section.title}
+                                    <span className="text-sm text-zinc-500 font-mono font-normal">
+                                        {section.content.length}자
+                                    </span>
                                 </h3>
                                 <div className="ml-auto flex items-center gap-2">
                                     <button
