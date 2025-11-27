@@ -6,6 +6,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { Layout } from "@/components/Layout";
 import { Toaster } from "@/components/ui/sonner";
 import { GlobalAlert } from "@/components/GlobalAlert";
+import InAppBrowserGuard from "@/components/InAppBrowserGuard";
 import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,6 +24,7 @@ export default function RootLayout({
     return (
         <html lang="ko" className="dark" suppressHydrationWarning>
             <body className={inter.className} suppressHydrationWarning={true}>
+                <InAppBrowserGuard />
                 <AuthProvider>
                     <DocumentProvider>
                         <Layout>
