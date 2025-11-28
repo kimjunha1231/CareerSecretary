@@ -189,7 +189,7 @@ export default function Archive() {
             {/* Header */}
             <div className="mb-8 flex items-center justify-between">
                 <div>
-                    <h1 className="text-4xl font-bold text-white mb-2">JobSecretary</h1>
+                    <h1 className="text-4xl font-bold text-white mb-2">자기소개서 저장소</h1>
                     <p className="text-zinc-400">저장된 자기소개서를 관리하세요</p>
                 </div>
                 <button
