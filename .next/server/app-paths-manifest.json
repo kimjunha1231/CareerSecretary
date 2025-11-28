@@ -1,5 +1,6 @@
 {
   "/api/account/delete/route": "app/api/account/delete/route.js",
+  "/dashboard/page": "app/dashboard/page.js",
   "/page": "app/page.js",
   "/archive/page": "app/archive/page.js"
 }
