@@ -47,6 +47,7 @@ export default function DocumentDetail() {
         jobPostUrl: '',
         tags: [] as string[],
         status: 'writing' as Status,
+        deadline: '',
         sections: [] as Section[]
     });
     const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
@@ -74,6 +75,7 @@ export default function DocumentDetail() {
                 jobPostUrl: doc.jobPostUrl || '',
                 tags: doc.tags || [],
                 status: doc.status || 'writing',
+                deadline: doc.deadline || '',
                 sections: finalSections
             });
         }
@@ -114,7 +116,8 @@ export default function DocumentDetail() {
             content: combinedContent,
             jobPostUrl: editForm.jobPostUrl,
             tags: editForm.tags,
-            status: editForm.status
+            status: editForm.status,
+            deadline: editForm.deadline
         });
         setIsEditing(false);
     };
@@ -203,6 +206,15 @@ export default function DocumentDetail() {
                                     className="w-full bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white focus:border-primary focus:outline-none text-sm"
                                     placeholder="채용 공고 링크 (선택)"
                                 />
+                                <div className="flex items-center gap-2">
+                                    <Calendar size={16} className="text-zinc-400" />
+                                    <input
+                                        type="date"
+                                        value={editForm.deadline}
+                                        onChange={e => setEditForm(prev => ({ ...prev, deadline: e.target.value }))}
+                                        className="bg-zinc-900 border border-zinc-700 rounded px-2 py-1 text-white focus:border-primary focus:outline-none text-sm [color-scheme:dark]"
+                                    />
+                                </div>
                                 <SmartTagInput
                                     tags={editForm.tags}
                                     onChange={tags => setEditForm(prev => ({ ...prev, tags }))}
@@ -232,6 +244,12 @@ export default function DocumentDetail() {
                                         <Calendar size={14} />
                                         {doc.createdAt}
                                     </div>
+                                    {doc.deadline && (
+                                        <div className="flex items-center gap-2 text-sm text-zinc-400 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
+                                            <Calendar size={14} />
+                                            마감일: {doc.deadline}
+                                        </div>
+                                    )}
                                     {doc.tags && doc.tags.map(tag => (
                                         <Badge key={tag} variant="secondary" className="text-xs">
                                             {tag}

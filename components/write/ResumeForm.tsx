@@ -112,10 +112,7 @@ export default function ResumeForm() {
             return;
         }
 
-        if (sections.every(s => !s.content)) {
-            toast.error('최소 하나의 문항 내용을 입력해주세요.');
-            return;
-        }
+
 
         // If coming from archive, show status dialog
         if (fromArchive) {
